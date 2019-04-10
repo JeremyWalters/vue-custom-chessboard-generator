@@ -1,27 +1,47 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+	<v-app id="app">
+		<v-toolbar color="primary" app dark>
+			<v-toolbar-title>Chess Board Generator</v-toolbar-title>
+		</v-toolbar>
+		<v-content>
+			<v-container grid-list-xs>
+				<v-flex xs3>
+					<v-text-field label="Chess Board Size" v-model.number="boardSizeInput"></v-text-field>
+				</v-flex>
+				<v-flex xs3>
+					<v-text-field label="Block Size" v-model.number="blockSize"></v-text-field>
+				</v-flex>
+				<v-container class="board-container" grid-list-md text-xs-center>
+					<v-layout v-for="(size, rowIndex) in boardSizeInput" :key="rowIndex" class="justify-center">
+						<div
+							:style="`background-color: ${findColor(index, rowIndex)}; width: ${blockSize}px; height: ${blockSize}px;`"
+							v-for="(size, index) in boardSizeInput"
+							:key="index"
+							class="block"
+						></div>
+					</v-layout>
+				</v-container>
+			</v-container>
+		</v-content>
+	</v-app>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import HelloWorld from './components/HelloWorld.vue'
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
-@Component({
-  components: {
-    HelloWorld
-  }
-})
-export default class App extends Vue {}
+@Component({})
+export default class App extends Vue {
+	private boardSizeInput = 0;
+	private blockSize = 10;
+
+	private findColor (index: number, rowIndex: number) {
+	  if (rowIndex % 2 === 0) index++;
+	  return index % 2 === 0 ? 'white' : 'black';
+	}
+}
 </script>
 <style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-  margin-top 60px
+.board-container {
+	background-color: grey;
+}
 </style>
